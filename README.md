@@ -1,2 +1,1 @@
-# aquarium
-ThreeJsJourney Discord Challenge 10 Project
+# Three.Js Journey Discord Challenge 19 Project

@@ -1,0 +1,9 @@
+/* @import "tailwindcss"; */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-night {
+  @apply bg-gradient-to-b from-[#1b2735] to-[#090a0f];
+}
