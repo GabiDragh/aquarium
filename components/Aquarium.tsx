@@ -38,7 +38,7 @@ export default function Aquarium() {
 
         <Building />
         <Water />
-        {/* <Tunnel /> */}
+        <Tunnel />
 
       </Canvas>
     </div>
