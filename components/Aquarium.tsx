@@ -4,6 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment, AccumulativeShadows, RandomizedLight } from "@react-three/drei";
 import Building from "../components/Building"
 import Water from "../components/Water";
+import Tunnel from "./Tunnel";
 
 // INFO: Camera poition log -> use only when needed otherwise it flods the log
 // function CameraDebugger() {
@@ -37,6 +38,7 @@ export default function Aquarium() {
 
         <Building />
         <Water />
+        {/* <Tunnel /> */}
 
       </Canvas>
     </div>
