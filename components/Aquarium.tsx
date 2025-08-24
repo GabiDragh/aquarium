@@ -1,9 +1,8 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Environment } from "@react-three/drei";
+import { OrbitControls, Environment, AccumulativeShadows, RandomizedLight } from "@react-three/drei";
 import Building from "../components/Building"
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Water from "../components/Water";
 
 // INFO: Camera poition log -> use only when needed otherwise it flods the log
@@ -26,8 +25,11 @@ export default function Aquarium() {
         {/* <CameraDebugger /> */}
         <ambientLight intensity={1} />
         <directionalLight position={[10, 10, 5]} intensity={0.7} />
-        <Environment preset="sunset" />
+        <Environment preset="forest" />
         <OrbitControls />
+        <AccumulativeShadows temporal frames={100} colorBlend={0.5} opacity={0.6} scale={25}>
+            <RandomizedLight radius={8} ambient={0.3} intensity={1.5} position={[5, 10, -5]} />
+        </AccumulativeShadows>
 
         <Building />
         <Water />
