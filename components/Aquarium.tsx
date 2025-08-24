@@ -30,7 +30,7 @@ export default function Aquarium() {
         <OrbitControls />
 
         <Building />
-        {/* <Water /> */}
+        <Water />
       </Canvas>
     </div>
   );
