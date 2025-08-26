@@ -7,7 +7,7 @@ import materials from "../constants/materials";
 import { applyMaterials } from "./common/applyMaterials";
 
 function Building() {
-  const { scene } = useGLTF("/models/aquariumWater.glb");
+  const { scene } = useGLTF("/models/building-unwrapped.glb");
   // console.log(scene)
 
   //NOTE: Initial aquarium building model, without the materials logic
@@ -35,6 +35,6 @@ function Building() {
   );
 }
 
-useGLTF.preload("/models/aquariumWater.glb");
+useGLTF.preload("/models/building-unwrapped.glb");
 
 export default Building;
