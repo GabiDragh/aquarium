@@ -1,6 +1,6 @@
 "use client";
 
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, Environment, AccumulativeShadows, RandomizedLight } from "@react-three/drei";
 import Building from "../components/Building"
 import Water from "../components/Water";
@@ -26,10 +26,12 @@ export default function Aquarium() {
   return (
     <div className="w-screen h-screen">
       <Canvas camera={{ 
-                      position: [-17.51, 2.86, 20.14], 
+                      position: [-20.57, 2.12, 26.60], 
                       fov: 50 }}>
         {/* <CameraDebugger /> */}
         <color attach='background' args={["#050914"]} />
+
+        
         
         <Environment preset="night" background={false} />
 

@@ -16,8 +16,8 @@ export default function Lights({ debug = true, floorY = 3.52 }: Props) {
   return (
     <Center disableY>
       {/* DARK BASE */}
-      <ambientLight intensity={0.08} color={0xffffff} />
-      <hemisphereLight color={0x6aa6ff} groundColor={0x001422} intensity={0.08} />
+      <ambientLight intensity={0.25} color={0xffffff} />
+      <hemisphereLight color={0x6aa6ff} groundColor={0x001422} intensity={0.35} />
 
       {/* FAINT SUN FROM ABOVE */}
       <directionalLight position={[0, 25, 0]} intensity={0.1} color={0xffffff}>
@@ -32,17 +32,17 @@ export default function Lights({ debug = true, floorY = 3.52 }: Props) {
       <pointLight name="NeonE" position={[ 2, floorY + 0.4,  6]} color={0xff6d00} intensity={20} distance={50} decay={3} />
       <pointLight name="NeonF" position={[ 10, floorY + 0.4,  6]} color={0xffd500} intensity={20} distance={50} decay={3} />
 
-      {debug && (
-        <>
+      {/* {debug && (
+        <> */}
           {/* <AttachDirectionalHelper lightName="DirectionalLight" /> */}
-          <AttachPointHelper lightName="NeonA" size={0.25} />
+          {/* <AttachPointHelper lightName="NeonA" size={0.25} />
           <AttachPointHelper lightName="NeonB" size={0.50} />
           <AttachPointHelper lightName="NeonC" size={0.75} />
           <AttachPointHelper lightName="NeonD" size={1} />
           <AttachPointHelper lightName="NeonE" size={1.25} />
           <AttachPointHelper lightName="NeonF" size={1.50} />
         </>
-      )}
+      )} */}
     </Center>
   );
 }

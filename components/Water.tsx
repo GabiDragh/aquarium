@@ -38,7 +38,7 @@ const {
       bg: "#282952"
     }),
     ...useControls("Optical", {
-      transmission: { value: 0.78, min: 0, max: 1 },
+      transmission: { value: 0.95, min: 0, max: 1 },
       thickness: { value: 0.04, min: 0, max: 10, step: 0.01 },
       backsideThickness: { value: 0.02, min: 0, max: 10, step: 0.01 },
       roughness: { value: 0.0, min: 0, max: 1, step: 0.01 },
@@ -48,8 +48,8 @@ const {
       chromaticAberration: { value: 0.45, min: 0, max: 1 },
       anisotropicBlur: { value: 0.39, min: 0, max: 1, step: 0.01 },
       distortion: { value: 0.80, min: 0, max: 1, step: 0.01 },
-      distortionScale: { value: 0.50, min: 0.01, max: 1, step: 0.01 },
-      temporalDistortion: { value: 0.17, min: 0, max: 1, step: 0.01 }
+      distortionScale: { value: 0.45, min: 0.01, max: 1, step: 0.01 },
+      temporalDistortion: { value: 0.10, min: 0, max: 1, step: 0.01 }
     }),
     ...useControls("Rendering", {
       samples: { value: 10, min: 1, max: 32, step: 1 },
