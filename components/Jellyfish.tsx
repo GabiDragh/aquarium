@@ -13,7 +13,7 @@ type SchoolProps = {
   margin?: number;
 
   // separation
-  separationRadius?: number;       // baseline distance (meters)
+  separationRadius?: number;       // baseline distance 
   separationStrength?: number;
 
   // sizes
@@ -57,7 +57,7 @@ type AgentParams = {
 
 export default function Jellyfish({
   url = "/models/jellyfish.glb",
-  count = 12,
+  count = 21,
   margin = 4,
   separationRadius = 4,
   separationStrength = 1.5,

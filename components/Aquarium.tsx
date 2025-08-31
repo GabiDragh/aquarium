@@ -6,6 +6,7 @@ import Building from "../components/Building"
 import Water from "../components/Water";
 import Tunnel from "./Tunnel";
 import Jellyfish from "./Jellyfish";
+import Lights from "./Lights";
 
 // INFO: Camera poition log -> use only when needed otherwise it flods the log
 // function CameraDebugger() {
@@ -24,19 +25,21 @@ import Jellyfish from "./Jellyfish";
 export default function Aquarium() {
   return (
     <div className="w-screen h-screen">
-      <Canvas camera={{ position: [-17.51, 2.86, 20.14], fov: 50 }}>
+      <Canvas camera={{ 
+                      position: [-17.51, 2.86, 20.14], 
+                      fov: 50 }}>
         {/* <CameraDebugger /> */}
+        <color attach='background' args={["#050914"]} />
+        
+        <Environment preset="forest" background={false} />
 
-        <ambientLight intensity={1} />
-        <directionalLight position={[10, 10, 5]} intensity={0.7} />
-
-        <Environment preset="forest" />
         <OrbitControls />
 
         <AccumulativeShadows temporal frames={100} colorBlend={0.5} opacity={0.6} scale={25}>
             <RandomizedLight radius={8} ambient={0.3} intensity={1.5} position={[5, 10, -5]} />
         </AccumulativeShadows>
 
+        <Lights debug={true} floorY={0.52} />
         <Building />
         <Water />
         <Tunnel />

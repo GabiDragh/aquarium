@@ -69,7 +69,7 @@ export function applyMaterials(
     targetGroup.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh
-        console.log(mesh.name, "UV's:", !!mesh.geometry.attributes.uv)
+        // console.log(mesh.name, "UV's:", !!mesh.geometry.attributes.uv)
         if (!mesh.geometry.attributes.uv) return
 
         //ao map uv2. If needed, clone uv 1 
