@@ -37,6 +37,13 @@ type SchoolProps = {
 
   color?: string;
   debugBox?: boolean;
+
+  // glow
+  palette?: string[];
+  glowRange?: [number, number];
+  glowHalo?: boolean;
+  haloScale?: number;
+  haloOpacity?: [number, number];
 };
 
 type AgentParams = {
@@ -51,13 +58,13 @@ type AgentParams = {
   wobbleSpeed: number;
   tiltPerSpeedDeg: number;
   maxTiltDeg: number;
-  scale: number;   // world scale
+  scale: number;  
   color: string;
 };
 
 export default function Jellyfish({
   url = "/models/jellyfish.glb",
-  count = 21,
+  count = 10,
   margin = 4,
   separationRadius = 4,
   separationStrength = 1.5,
@@ -81,10 +88,17 @@ export default function Jellyfish({
 
   color = "#7dd3fc",
   debugBox = false,
+
+  //glow
+  palette = ["#00f5ff", "#ff3ef3", "#00ff85", "#22e3ff", "#ffd500", "#ff6d00"],
+  glowRange = [0.7, 2.2],
+  glowHalo = false,
+  haloScale = 1.08,
+  haloOpacity = [0.18, 0.42],
 }: SchoolProps) {
   const { scene } = useGLTF(url);
 
-  // Reuse one geometry for all
+  // One geometry for all
   const jellyGeom = useMemo(() => {
     let m: THREE.Mesh | null = null;
     scene.traverse((c) => {
@@ -100,6 +114,7 @@ export default function Jellyfish({
   const outerRefs = useRef<(THREE.Group | null)[]>([]);
   const innerRefs = useRef<(THREE.Group | null)[]>([]);
   const matRefs   = useRef<(THREE.Material | null)[]>([]);
+  const haloMatRefs = useRef<(THREE.MeshBasicMaterial | null)[]>([]);
 
   // Water refs
   const waterObjRef = useRef<THREE.Object3D | null>(null);
@@ -130,6 +145,15 @@ export default function Jellyfish({
     scale: computeAgentScale(baseScale, scaleRange, scaleJitter),
     color,
   })));
+
+  
+  // Neon per-jelly (for glow)
+  const neon = useRef(
+    Array.from({ length: count }, () => {
+      const c = new THREE.Color(palette[(Math.random() * palette.length) | 0]);
+      return { base: c, current: c.clone(), hueShift: (Math.random() * 0.04 - 0.02) };
+    })
+  );
 
   // For scale-aware separation
   const sepRefScale = useMemo(
@@ -321,9 +345,19 @@ export default function Jellyfish({
       outer.rotation.z = THREE.MathUtils.lerp(outer.rotation.z, tiltZ, THREE.MathUtils.clamp(delta * 3, 0, 1));
 
       // Emissive pulse
-      if (mat) {
-        const beat = (Math.sin(t * cfg.pulseFreq * Math.PI * 2) + 1) * 0.5;
-        mat.emissiveIntensity = 0.28 + beat * 0.32;
+       if (mat) {
+        // hue drift
+        const clr = neon.current[i].current;
+        const hsl: { h: number; s: number; l: number } = { h: 0, s: 0, l: 0 };
+        clr.getHSL(hsl);
+        clr.setHSL((hsl.h + neon.current[i].hueShift * delta + 1) % 1, Math.min(1, hsl.s), hsl.l);
+
+        // pulse intensity
+        const beat = (Math.sin(t * 1.8 + i * 0.7) + 1) * 0.5;
+        const ei = THREE.MathUtils.lerp(glowRange[0], glowRange[1], beat);
+
+        mat.emissive.copy(clr);
+        mat.emissiveIntensity = ei;
       }
     }
   });
@@ -339,12 +373,13 @@ export default function Jellyfish({
               <mesh geometry={jellyGeom} castShadow receiveShadow>
                 <MeshWobbleMaterial
                   ref={(el) => { matRefs.current[i] = el as THREE.MeshStandardMaterial | null; }}
-                  color={params.current[i].color}
-                  emissive="#29b6f6"
+                   color={"#cfe9ff"}
+                  emissive={"#ffffff"}
                   roughness={0.35}
                   metalness={0.05}
                   factor={params.current[i].wobbleFactor}
                   speed={params.current[i].wobbleSpeed}
+                  toneMapped={false}
                 />
               </mesh>
             </group>

@@ -43,7 +43,7 @@ export default function Aquarium() {
         <Building />
         <Water />
         <Tunnel />
-        <Jellyfish />
+        <Jellyfish glowHalo haloScale={1.1}/>
 
       </Canvas>
     </div>
