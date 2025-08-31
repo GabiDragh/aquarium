@@ -28,21 +28,21 @@ export default function Lights({ debug = true, floorY = 3.52 }: Props) {
       <pointLight name="NeonA" position={[-10, floorY + 0.4, -6]} color={0x00f5ff} intensity={20} distance={30} decay={3} />
       <pointLight name="NeonB" position={[ -2, floorY + 0.4, -6]} color={0xff3ef3} intensity={20} distance={50} decay={3} />
       <pointLight name="NeonC" position={[ 10, floorY + 0.4, -6]} color={0x00ff85} intensity={20} distance={50} decay={3} />
-      <pointLight name="NeonD" position={[-10, floorY + 0.4,  6]} color={0x22e3ff} intensity={20} distance={50} decay={3} />
+      <pointLight name="NeonD" position={[-9.5, floorY + 0.4,  6]} color={0x22e3ff} intensity={20} distance={50} decay={3} />
       <pointLight name="NeonE" position={[ 2, floorY + 0.4,  6]} color={0xff6d00} intensity={20} distance={50} decay={3} />
-      <pointLight name="NeonF" position={[ 10, floorY + 0.4,  6]} color={0xffd500} intensity={20} distance={50} decay={3} />
+      <pointLight name="NeonF" position={[ 10.8, floorY + 0.4,  6.2]} color={0xffd500} intensity={20} distance={50} decay={3} />
 
-      {/* {debug && (
-        <> */}
+      {debug && (
+        <>
           {/* <AttachDirectionalHelper lightName="DirectionalLight" /> */}
-          {/* <AttachPointHelper lightName="NeonA" size={0.25} />
+          <AttachPointHelper lightName="NeonA" size={0.25} />
           <AttachPointHelper lightName="NeonB" size={0.50} />
           <AttachPointHelper lightName="NeonC" size={0.75} />
           <AttachPointHelper lightName="NeonD" size={1} />
           <AttachPointHelper lightName="NeonE" size={1.25} />
           <AttachPointHelper lightName="NeonF" size={1.50} />
         </>
-      )} */}
+      )}
     </Center>
   );
 }
