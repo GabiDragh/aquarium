@@ -31,7 +31,7 @@ export default function Aquarium() {
         {/* <CameraDebugger /> */}
         <color attach='background' args={["#050914"]} />
         
-        <Environment preset="forest" background={false} />
+        <Environment preset="night" background={false} />
 
         <OrbitControls />
 
