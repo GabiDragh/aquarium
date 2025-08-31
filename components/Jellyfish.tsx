@@ -92,9 +92,6 @@ export default function Jellyfish({
   //glow
   palette = ["#00f5ff", "#ff3ef3", "#00ff85", "#22e3ff", "#ffd500", "#ff6d00"],
   glowRange = [0.7, 2.2],
-  glowHalo = false,
-  haloScale = 1.08,
-  haloOpacity = [0.18, 0.42],
 }: SchoolProps) {
   const { scene } = useGLTF(url);
 
@@ -114,7 +111,6 @@ export default function Jellyfish({
   const outerRefs = useRef<(THREE.Group | null)[]>([]);
   const innerRefs = useRef<(THREE.Group | null)[]>([]);
   const matRefs   = useRef<(THREE.Material | null)[]>([]);
-  const haloMatRefs = useRef<(THREE.MeshBasicMaterial | null)[]>([]);
 
   // Water refs
   const waterObjRef = useRef<THREE.Object3D | null>(null);
