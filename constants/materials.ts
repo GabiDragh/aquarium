@@ -27,6 +27,7 @@ export type MaterialConfig = {
         //Math.PI * 2 - full turn (360)
         bumpScale?: number;
         displacementScale?: number;
+        roughness?: number;
     }
 };
 
@@ -51,25 +52,25 @@ const materials: MaterialConfig[] = [
             rotation: Math.PI/2,
         }
     },
-    {
-        groupName: "Carpet",
-        label: "Tunnel Carpet Floor",
-        textures: {
-            map: "/textures/carpet/office-carpet-fabric_albedo.png",
-            aoMap: "/textures/carpet/office-carpet-fabric_ao.png",
-            bumpMap: "/textures/carpet/office-carpet-fabric_height.png",
-            metalnessMap: "/textures/carpet/office-carpet-fabric_metallic.png",
-            normalMap: "/textures/carpet/office-carpet-fabric_normal-ogl.png",
-            roughnessMap: "/textures/carpet/office-carpet-fabric_roughness.png",
+    // {
+    //     groupName: "Carpet",
+    //     label: "Tunnel Carpet Floor",
+    //     textures: {
+    //         map: "/textures/carpet/office-carpet-fabric_albedo.png",
+    //         aoMap: "/textures/carpet/office-carpet-fabric_ao.png",
+    //         bumpMap: "/textures/carpet/office-carpet-fabric_height.png",
+    //         metalnessMap: "/textures/carpet/office-carpet-fabric_metallic.png",
+    //         normalMap: "/textures/carpet/office-carpet-fabric_normal-ogl.png",
+    //         roughnessMap: "/textures/carpet/office-carpet-fabric_roughness.png",
 
-        },
-        settings: {
-            repeat: [20, 20],
-            bumpScale: 1.0,
-            displacementScale: 1.0,
-            rotation: Math.PI/2,
-        }
-    },
+    //     },
+    //     settings: {
+    //         repeat: [20, 20],
+    //         bumpScale: 1.0,
+    //         displacementScale: 1.0,
+    //         rotation: Math.PI/2,
+    //     }
+    // },
      {
         groupName: "Cill",
         label: "Main Window Cills",
@@ -90,25 +91,25 @@ const materials: MaterialConfig[] = [
         }
     },
     // TODO: Find a more discreet material for the columns
-    {
-        groupName: "Columns",
-        label: "Columns",
-        textures: {
-            map: "/textures/columns/speckled-granite1_albedo.png",
-            aoMap: "/textures/columns/speckled-granite1_ao.png",
-            bumpMap: "/textures/columns/speckled-granite1_height.png",
-            metalnessMap: "/textures/columns/speckled-granite1_metallic.png",
-            normalMap: "/textures/columns/speckled-granite1_normal-ogl.png",
-            roughnessMap: "/textures/columns/speckled-granite1_roughness.png",
+    // {
+    //     groupName: "Columns",
+    //     label: "Columns",
+    //     textures: {
+    //         map: "/textures/columns/speckled-granite1_albedo.png",
+    //         aoMap: "/textures/columns/speckled-granite1_ao.png",
+    //         bumpMap: "/textures/columns/speckled-granite1_height.png",
+    //         metalnessMap: "/textures/columns/speckled-granite1_metallic.png",
+    //         normalMap: "/textures/columns/speckled-granite1_normal-ogl.png",
+    //         roughnessMap: "/textures/columns/speckled-granite1_roughness.png",
 
-        },
-        settings: {
-            repeat: [1, 1],
-            bumpScale: 1.0,
-            displacementScale: 1.0,
-            rotation: Math.PI,
-        }
-    },
+    //     },
+    //     settings: {
+    //         repeat: [1, 1],
+    //         bumpScale: 1.0,
+    //         displacementScale: 1.0,
+    //         rotation: Math.PI,
+    //     }
+    // },
     //  {
     //     groupName: "Detail_Gold",
     //     label: "Window Architraves",
@@ -126,6 +127,25 @@ const materials: MaterialConfig[] = [
     //         bumpScale: 1.0,
     //         displacementScale: 1.0,
     //         rotation: Math.PI,
+    //     }
+    // },
+
+    // {
+    //     groupName: "Floor_Enternal",
+    //     label: "Main Floor Area",
+    //     textures: {
+    //         map: "/textures/floor-enternal/PolishedConcrete01_4K_BaseColor.png",
+    //         bumpMap: "/textures/floor-enternal/PolishedConcrete01_4K_Height.png",
+    //         normalMap: "/textures/floor-enternal/PolishedConcrete01_4K_Normal.png",
+    //         roughnessMap: "/textures/floor-enternal/PolishedConcrete01_4K_Roughness.png",
+
+    //     },
+    //     settings: {
+    //         repeat: [0.1, 0.1],
+    //         bumpScale: 0.5,
+    //         displacementScale: 1,
+    //         rotation: Math.PI*1.5,
+    //         roughness: 1,
     //     }
     // },
 

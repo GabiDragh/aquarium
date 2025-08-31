@@ -74,6 +74,7 @@ const {
   return waterMesh ? (
     <Center disableY>
       <mesh
+        name="WaterVolume" //for jellyfish functionality
         geometry={waterMesh.geometry}
         position={waterMesh.position}
         rotation={waterMesh.rotation}

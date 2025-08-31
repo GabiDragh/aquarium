@@ -5,6 +5,7 @@ import { OrbitControls, Environment, AccumulativeShadows, RandomizedLight } from
 import Building from "../components/Building"
 import Water from "../components/Water";
 import Tunnel from "./Tunnel";
+import Jellyfish from "./Jellyfish";
 
 // INFO: Camera poition log -> use only when needed otherwise it flods the log
 // function CameraDebugger() {
@@ -39,6 +40,7 @@ export default function Aquarium() {
         <Building />
         <Water />
         <Tunnel />
+        <Jellyfish />
 
       </Canvas>
     </div>
