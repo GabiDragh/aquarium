@@ -1,94 +1,92 @@
 //NOTE: Component to handle materials application logic (reusable for each material from the materials.ts contants file -> assigns to each blender export collection group)
 
-"use client"
+import * as THREE from "three";
+import { MaterialConfig } from "../../constants/materials";
 
-import * as THREE from "three"
-import type { MaterialConfig } from "../../constants/materials"
-
-export function applyMaterials(scene: THREE.Group, materials: MaterialConfig[]) {
-  const loader = new THREE.TextureLoader()
-
-  // helper to log error
-  const loadTex = (url?: string, setup?: (t: THREE.Texture) => void) => {
-    if (!url) return undefined
-    const tex = loader.load(
-      url,
-      (t) => {
-        // defaults for all textures
-        t.wrapS = t.wrapT = THREE.RepeatWrapping
-        t.anisotropy = 8
-        // sRGB only for color maps; the rest stay linear
-        if (!/(_roughness|_metallic|_normal|_height|_ao)|roughness|metal/i.test(url)) {
-          t.colorSpace = THREE.SRGBColorSpace
-        }
-        if (setup) setup(t)
-      },
-      undefined,
-      (err) => {
-        console.error(`[applyMaterials] FAILED to load texture: ${url}`, err)
-      }
-    )
-    return tex
-  }
+export function applyMaterials(
+  scene: THREE.Group,
+  materials: MaterialConfig[]
+) {
+  const textureLoader = new THREE.TextureLoader()
 
   materials.forEach(({ groupName, textures, settings }) => {
-    const grp = scene.getObjectByName(groupName) as THREE.Group | undefined
-    if (!grp) {
-      console.warn(`[applyMaterials] Group not found in GLB: ${groupName}`)
-      return
+    //get group from scene by name
+    const targetGroup = scene.getObjectByName(groupName) as THREE.Group
+    if (!targetGroup) return
+
+    //new group material
+    const material = new THREE.MeshStandardMaterial()
+
+    //Maps logic:
+    //1. base color map: appplies constants file settings
+    if (textures.map) {
+      material.map = textureLoader.load(textures.map, (t: THREE.Texture) => {
+        // console.log("Albedo loaded", t.image?.src);
+        t.wrapS = t.wrapT = THREE.RepeatWrapping
+        if (settings?.repeat) t.repeat.set(...settings.repeat)
+        if (settings?.rotation) t.rotation = settings.rotation
+        material.map = t
+        material.needsUpdate = true
+        t.colorSpace = THREE.SRGBColorSpace
+      });
+    }
+    material.side = THREE.DoubleSide //fallbabk for walls etc to make sure the texture renders on both sides of the face
+
+    //2. ao map
+    if (textures.aoMap) {
+        material.aoMap = textureLoader.load(textures.aoMap)}
+
+    //3. bump/height map
+    if (textures.bumpMap) {
+      material.bumpMap = textureLoader.load(textures.bumpMap)
+      material.bumpScale = settings?.bumpScale ?? 1
     }
 
-    const mat = new THREE.MeshStandardMaterial()
-    mat.side = THREE.DoubleSide
-    if (settings?.roughness !== undefined) mat.roughness = settings.roughness
+    //4. metalness map: important to add if existent in the pbr package
+    if (textures.metalnessMap) {
+      material.metalnessMap = textureLoader.load(textures.metalnessMap)}
 
-    // Base color (albedo)
-    mat.map = loadTex(textures.map, (t) => {
-      if (settings?.repeat) t.repeat.set(...settings.repeat)
-      if (settings?.rotation) {
-        t.center.set(0.5, 0.5) // rotate around center
-        t.rotation = settings.rotation
-      }
-    }) ?? null
+      //5. normal map: normals orientation (INFO: remember to uv unwrap in Blender, otherwise 3D model entities won't have the normals and won't see any material applied)
+    if (textures.normalMap) {
+      material.normalMap = textureLoader.load(textures.normalMap)
+      material.normalScale = new THREE.Vector2(1, 1)
+    }
 
-    // AO
-    mat.aoMap = loadTex(textures.aoMap) ?? null
+    //6. roughness map: apply settings from the constants file again to keep the same scale as base/albedo map
+    if (textures.roughnessMap) {
+      material.roughnessMap = textureLoader.load(
+        textures.roughnessMap,
+        (t: THREE.Texture) => {
+          t.wrapS = t.wrapT = THREE.RepeatWrapping;
+          if (settings?.repeat) t.repeat.set(...settings.repeat)
+          if (settings?.rotation) t.rotation = settings.rotation
+        }
+      );
+    }
 
-    // Bump / Height
-    mat.bumpMap = loadTex(textures.bumpMap) ?? null
-    if (mat.bumpMap) mat.bumpScale = settings?.bumpScale ?? 1
-
-    // Metalness
-    mat.metalnessMap = loadTex(textures.metalnessMap) ?? null
-
-    // Normal
-    mat.normalMap = loadTex(textures.normalMap) ?? null
-    if (mat.normalMap) mat.normalScale = new THREE.Vector2(1, 1)
-
-    // Roughness
-    mat.roughnessMap = loadTex(textures.roughnessMap, (t) => {
-      if (settings?.repeat) t.repeat.set(...settings.repeat)
-      if (settings?.rotation) {
-        t.center.set(0.5, 0.5)
-        t.rotation = settings.rotation
-      }
-    }) ?? null
-
-    // Apply to meshes in the group
-    grp.traverse((child) => {
+    //Apply material to meshes inside the group
+    // Traversing through group to assign material to each mesh in the group (name based)
+    targetGroup.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh
-        if (!mesh.geometry.attributes.uv) {
-          console.warn(`[applyMaterials] Mesh has no UVs, skipping: ${mesh.name}`)
-          return
-        }
+        // console.log(mesh.name, "UV's:", !!mesh.geometry.attributes.uv)
+        if (!mesh.geometry.attributes.uv) return
+
+        //ao map uv2. If needed, clone uv 1 
         if (textures.aoMap && mesh.geometry.attributes.uv) {
-          mesh.geometry.setAttribute("uv2", mesh.geometry.attributes.uv.clone())
+          mesh.geometry.setAttribute(
+            "uv2",
+            mesh.geometry.attributes.uv.clone()
+          )
         }
-        mesh.material = mat
+
+        //assigns material
+        mesh.material = material
+
+        //enables shadows
         mesh.castShadow = true
         mesh.receiveShadow = true
       }
-    })
-  })
+    });
+  });
 }
