@@ -2,81 +2,94 @@
 
 "use client";
 
-
-import { useThree, useFrame } from "@react-three/fiber";
-import { useMemo, useRef, useState, useEffect } from "react";
+import { useThree } from "@react-three/fiber";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { OrbitControls } from "@react-three/drei";
 
-
-// Tunnel path as XYZ coordinates (CAD-style)
-const tunnelPathCoords = [
-[29, 10.4, 0.52],
-[29, 15.992, 0.52],
-[29, 21.584, 0.52],
-[29.161, 22.962, 0.52],
-[29.633, 24.267, 0.52],
-[30, 25, 0.52],
-[30.367, 25.733, 0.52],
-[30.839, 27.038, 0.52],
-[31, 28.416, 0.52],
-[31, 34.008, 0.52],
-[31, 39.6, 0.52],
+// Tunnel path as XYZ coordinates
+const tunnelPathCoords: [number, number, number][] = [
+  [1.38, 2, -16.11],
+  [1.2, 2, -12.42],
+  [1.27, 2, -7.35],
+  [1.03, 2, -3.92],
+  [0.19, 2, -1.04],
+  [-0.7, 2, 0.32],
+  [-1.27, 2, 2.06],
+  [-0.3, 2, 4.9],
+  [-1.03, 2, 9.96],
+  [-0.99, 2, 15.58],
 ];
 
-
 export default function TunnelExperience() {
-const { camera } = useThree();
-const curve = useMemo(() => {
-return new THREE.CatmullRomCurve3(
-tunnelPathCoords.map(([x, y, z]) => new THREE.Vector3(x, z, -y))
-);
-}, []);
+  const { camera, gl } = useThree();
+  const controlsRef = useRef<any>(null);
 
+  const [insideTunnel, setInsideTunnel] = useState(false);
+  const [index, setIndex] = useState(0);
 
-const [insideTunnel, setInsideTunnel] = useState(false);
-const [index, setIndex] = useState(0);
-const movingRef = useRef(false);
+  // --- Toggle tunnel mode with T ---
+  useEffect(() => {
+    const toggle = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === "t") {
+        setInsideTunnel((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", toggle);
+    return () => window.removeEventListener("keydown", toggle);
+  }, []);
 
+  // --- Handle stepping (keyboard + click) ---
+  useEffect(() => {
+    if (!insideTunnel) return;
 
-// Listen to keypress events
-useEffect(() => {
-const handleKeyDown = (e: KeyboardEvent) => {
-if (!insideTunnel) return;
+    const handleKey = (e: KeyboardEvent) => {
+      const key = e.key.toLowerCase();
+      if (key === "w" || key === "arrowup") {
+        setIndex((i) => Math.min(i + 1, tunnelPathCoords.length - 1));
+      }
+      if (key === "s" || key === "arrowdown") {
+        setIndex((i) => Math.max(i - 1, 0));
+      }
+    };
 
+    const handleClick = () => {
+      setIndex((i) => Math.min(i + 1, tunnelPathCoords.length - 1));
+    };
 
-if (e.key === "w" || e.key === "ArrowUp") {
-setIndex((i) => Math.min(tunnelPathCoords.length - 1, i + 1));
-movingRef.current = true;
-}
-if (e.key === "s" || e.key === "ArrowDown") {
-setIndex((i) => Math.max(0, i - 1));
-movingRef.current = true;
-}
-};
-window.addEventListener("keydown", handleKeyDown);
-return () => window.removeEventListener("keydown", handleKeyDown);
-}, [insideTunnel]);
+    window.addEventListener("keydown", handleKey);
+    window.addEventListener("click", handleClick);
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+      window.removeEventListener("click", handleClick);
+    };
+  }, [insideTunnel]);
 
+  // --- Snap camera + lock pivot at current waypoint ---
+  useEffect(() => {
+    if (!insideTunnel || !controlsRef.current) return;
 
-// Animate camera to new position
-useFrame((_, delta) => {
-if (!insideTunnel) return;
-const point = curve.getPoint(index / (tunnelPathCoords.length - 1));
-if (point) {
-camera.position.lerp(point, delta * 5);
-}
-});
+    const [x, y, z] = tunnelPathCoords[index];
+    const pos = new THREE.Vector3(x, y, z);
 
+    // Place camera at the waypoint
+    camera.position.copy(pos);
 
-// Optional: toggle tunnel mode with a key (e.g., "t")
-useEffect(() => {
-const toggle = (e: KeyboardEvent) => {
-if (e.key === "t") setInsideTunnel((prev) => !prev);
-};
-window.addEventListener("keydown", toggle);
-return () => window.removeEventListener("keydown", toggle);
-}, []);
+    // Lock orbit pivot at the same spot
+    controlsRef.current.target.copy(pos);
+    controlsRef.current.update();
+  }, [index, insideTunnel, camera]);
 
-
-return null;
+  return (
+    <>
+      {insideTunnel && (
+        <OrbitControls
+          ref={controlsRef}
+          args={[camera, gl.domElement]}
+          enablePan={false}
+          enableZoom={false}
+        />
+      )}
+    </>
+  );
 }

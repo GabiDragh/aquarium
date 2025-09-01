@@ -13,24 +13,28 @@ import Tunnel from "./Tunnel";
 import Jellyfish from "./Jellyfish";
 import Lights from "./Lights";
 import { Leva } from "leva";
+import { useState } from "react";
 
 // INFO: Camera poition log -> use only when needed otherwise it flods the log
-// function CameraDebugger() {
-//     const {camera } = useThree()
+function CameraDebugger() {
+    const {camera } = useThree()
 
-//     useFrame(() => {
-//         console.log("Position:", camera. position)
-//         console.log("Rotation:", camera.rotation)
+    useFrame(() => {
+        console.log("Position:", camera. position)
+        console.log("Rotation:", camera.rotation)
 
-//     })
-//     return null
-// }
+    })
+    return null
+}
 
 // DONE: Add Leva collapse={false} to each folder
 
 const debug = false;
 
 export default function Aquarium() {
+
+  
+
   return (
     <div className="w-screen h-screen">
       <Leva collapsed={true} hidden={!debug} oneLineLabels />
@@ -40,7 +44,7 @@ export default function Aquarium() {
           fov: 50,
         }}
       >
-        {/* <CameraDebugger /> */}
+        <CameraDebugger />
         <color attach="background" args={["#050914"]} />
 
         <Environment preset="night" background={false} />
