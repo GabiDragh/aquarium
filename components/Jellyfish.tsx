@@ -64,7 +64,7 @@ type AgentParams = {
 
 export default function Jellyfish({
   url = "/models/jellyfish.glb",
-  count = 6,
+  count = 10,
   margin = 4,
   separationRadius = 4,
   separationStrength = 1.5,
